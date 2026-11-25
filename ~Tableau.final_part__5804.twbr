@@ -1906,6 +1906,15 @@
           <table-calc ordering-type='Rows' />
         </calculation>
       </column>
+      <column caption='Customer Order Count' datatype='integer' name='[Calculation_1161360548630528]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED [Customer_ID] :&#13;&#10;    COUNTD([Order_ID])&#13;&#10;}' />
+      </column>
+      <column caption='Repeat Customer Flag' datatype='integer' name='[Calculation_1161360548786177]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='IF [Calculation_1161360548630528] &gt; 1 THEN&#13;&#10;    1&#13;&#10;ELSE&#13;&#10;    0&#13;&#10;END' />
+      </column>
+      <column caption='Repeat Customer Rate' datatype='real' name='[Calculation_1161360548904962]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='COUNTD(&#13;&#10;    IF [Calculation_1161360548630528] &gt; 1&#13;&#10;    THEN [Customer_ID]&#13;&#10;    END&#13;&#10;)&#13;&#10;/&#13;&#10;COUNTD([Customer_ID])' />
+      </column>
       <column caption='Target Attainment %' datatype='real' name='[Calculation_1403594350133248]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='SUM([Net_Revenue_USD])&#13;&#10;/&#13;&#10;SUM([Target_Net_Revenue_USD])' />
       </column>
@@ -2052,6 +2061,7 @@
       <column-instance column='[Calculation_1115796012175360]' derivation='User' name='[usr:Calculation_1115796012175360:qk]' pivot='key' type='quantitative'>
         <table-calc ordering-type='Rows' />
       </column-instance>
+      <column-instance column='[Calculation_1161360548904962]' derivation='User' name='[usr:Calculation_1161360548904962:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Calculation_1534159812755460]' derivation='User' name='[usr:Calculation_1534159812755460:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Calculation_1534159812988933]' derivation='User' name='[usr:Calculation_1534159812988933:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
@@ -3672,6 +3682,9 @@
             <map to='#a0cbe8'>
               <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[__tableau_internal_object_id__].[cnt:Customer_9C1348FFE1AB464DBFB33B48F500E0C1:qk]&quot;</bucket>
             </map>
+            <map to='#a0cbe8'>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1161360548904962:qk]&quot;</bucket>
+            </map>
             <map to='#b07aa1'>
               <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Profit_USD:qk]&quot;</bucket>
             </map>
@@ -4152,7 +4165,6 @@
         <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
         <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
         <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-        <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
         <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
         <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
         <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -4164,7 +4176,6 @@
         <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
         <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
         <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-        <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
         <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
         <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
         <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -4194,9 +4205,6 @@
       </filter>
       <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Region:nk]'>
         <groupfilter function='level-members' level='[none:Region:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
-      </filter>
-      <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]'>
-        <groupfilter function='level-members' level='[none:Return_Reason:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
       </filter>
       <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Sales_Channel:nk]'>
         <groupfilter function='level-members' level='[none:Sales_Channel:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
@@ -4442,7 +4450,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Quarter]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -4455,7 +4462,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -4500,7 +4506,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Country)]</column>
           </slices>
@@ -4565,7 +4570,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -4581,7 +4585,7 @@
             <groupfilter function='level-members' level='[Ship_Mode]' user:ui-action-filter='[Action18_72DF60C3CC9D4729A7AC7122ADD0BC2A]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <shelf-sorts>
-            <shelf-sort-v2 dimension-to-sort='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' direction='ASC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.0j495kw0i1sa6810dumqo0buc8yy].[avg:Days_to_Ship:qk]' shelf='rows' />
+            <shelf-sort-v2 dimension-to-sort='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' direction='DESC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.0j495kw0i1sa6810dumqo0buc8yy].[avg:Days_to_Ship:qk]' shelf='rows' />
           </shelf-sorts>
           <slices>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Return Reason)]</column>
@@ -4597,7 +4601,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Return Date))]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
@@ -4671,7 +4674,6 @@
             <column caption='Product Name' datatype='string' name='[Product_Name]' role='dimension' type='nominal' />
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -4683,7 +4685,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -4723,7 +4724,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -4782,7 +4782,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Product Name' datatype='string' name='[Product_Name]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -4794,7 +4793,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -4824,7 +4822,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -4883,7 +4880,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -4895,7 +4891,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -4917,7 +4912,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Country)]</column>
           </slices>
@@ -4980,7 +4974,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -4992,7 +4985,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -5022,7 +5014,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -5086,7 +5077,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -5098,7 +5088,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -5108,8 +5097,8 @@
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013503594499:qk]&quot;' />
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013483458562:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013503594499:qk]&quot;' />
             </groupfilter>
           </filter>
           <manual-sort column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' direction='ASC'>
@@ -5122,7 +5111,6 @@
             <groupfilter function='level-members' level='[Sales_Channel]' user:ui-action-filter='[Action12_2B2FC7FF11F344F1BED089371721613C]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <slices>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Brand:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Region:nk]</column>
@@ -5134,9 +5122,9 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Sales Channel)]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -5145,29 +5133,20 @@
             <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013483458562:qk]' value='p0.0%' />
             <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013503594499:qk]' value='p0.0%' />
           </style-rule>
-          <style-rule element='header'>
-            <format attr='height-header' value='18' />
-          </style-rule>
         </style>
         <panes>
-          <pane id='5' selection-relaxation-option='selection-relaxation-allow'>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
             <view>
               <breakdown value='auto' />
             </view>
-            <mark class='Bar' />
+            <mark class='Automatic' />
             <encodings>
               <color column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' />
             </encodings>
-            <style>
-              <style-rule element='mark'>
-                <format attr='mark-labels-cull' value='false' />
-                <format attr='mark-labels-show' value='true' />
-              </style-rule>
-            </style>
           </pane>
         </panes>
-        <rows>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Sales_Channel:nk]</rows>
-        <cols>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Multiple Values]</cols>
+        <rows>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Multiple Values]</rows>
+        <cols>([federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Sales_Channel:nk] / [federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names])</cols>
       </table>
       <simple-id uuid='{78C46D48-FF20-44F7-B6E3-DAF76C24BE2D}' />
     </worksheet>
@@ -5206,7 +5185,6 @@
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Quarter]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -5219,11 +5197,9 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
-            <column-instance column='[Target_Net_Revenue_USD]' derivation='Sum' name='[sum:Target_Net_Revenue_USD:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1403594350133248]' derivation='User' name='[usr:Calculation_1403594350133248:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812132864]' derivation='User' name='[usr:Calculation_1534159812132864:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812284417]' derivation='User' name='[usr:Calculation_1534159812284417:qk]' pivot='key' type='quantitative' />
@@ -5232,11 +5208,17 @@
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1403594350133248:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Target_Net_Revenue_USD:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812284417:qk]&quot;' />
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812132864:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812284417:qk]&quot;' />
             </groupfilter>
           </filter>
+          <manual-sort column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1403594350133248:qk]&quot;</bucket>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812132864:qk]&quot;</bucket>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812284417:qk]&quot;</bucket>
+            </dictionary>
+          </manual-sort>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Brand,Region)]'>
             <groupfilter function='crossjoin' user:ui-action-filter='[Action22_1C5A1E833991463CBF3CA1F15AFBAD8B]' user:ui-enumeration='all' user:ui-marker='enumerate'>
               <groupfilter function='level-members' level='[Brand]' />
@@ -5272,7 +5254,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Country)]</column>
           </slices>
@@ -5285,7 +5266,6 @@
             <format attr='font-weight' value='bold' />
             <format attr='color' value='#000000' />
             <format attr='text-align' value='center' />
-            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Target_Net_Revenue_USD:qk]' value='c&quot;$&quot;#,##0,,.00M;&quot;$&quot;-#,##0,,.00M' />
             <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812284417:qk]' value='c&quot;$&quot;#,##0,,.00M;&quot;$&quot;-#,##0,,.00M' />
             <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812132864:qk]' value='c&quot;$ &quot;#,##0,,.00M;&quot;$ &quot;-#,##0,,.00M' />
           </style-rule>
@@ -5368,9 +5348,6 @@
             <column caption='Average Shipping Days' datatype='real' name='[Calculation_0331845958770690]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='AVG([Days_to_Ship])' />
             </column>
-            <column caption='Total Shipping Cost' datatype='real' name='[Calculation_0331845958877187]' role='measure' type='quantitative'>
-              <calculation class='tableau' formula='SUM([Shipping_Cost_USD])' />
-            </column>
             <column caption='Average Order Value' datatype='real' name='[Calculation_1534159812988933]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='SUM([Net_Revenue_USD])&#13;&#10;/&#13;&#10;COUNTD([Order_ID])' />
             </column>
@@ -5391,7 +5368,6 @@
             <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
-            <column caption='Shipping Cost USD' datatype='real' name='[Shipping_Cost_USD]' role='measure' type='quantitative' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
             <column-instance column='[Return_Date]' derivation='Month' name='[mn:Return_Date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Brand]' derivation='None' name='[none:Brand:nk]' pivot='key' type='nominal' />
@@ -5402,7 +5378,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -5410,16 +5385,14 @@
             <column-instance column='[Calculation_0331845958483968]' derivation='User' name='[usr:Calculation_0331845958483968:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_0331845958651905]' derivation='User' name='[usr:Calculation_0331845958651905:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_0331845958770690]' derivation='User' name='[usr:Calculation_0331845958770690:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[Calculation_0331845958877187]' derivation='User' name='[usr:Calculation_0331845958877187:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812988933]' derivation='User' name='[usr:Calculation_1534159812988933:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958770690:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958651905:qk]&quot;' />
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958483968:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958877187:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958651905:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958770690:qk]&quot;' />
             </groupfilter>
           </filter>
           <manual-sort column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' direction='ASC'>
@@ -5454,7 +5427,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Return Date))]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
@@ -5467,13 +5439,14 @@
             <format attr='color' value='#000000' />
             <format attr='font-weight' value='bold' />
             <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958651905:qk]' value='c&quot;$&quot;#,##0,,.00M' />
-            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958877187:qk]' value='c&quot;$&quot;#,##0,.00K' />
+            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958483968:qk]' value='n#,##0,.00K;-#,##0,.00K' />
           </style-rule>
           <style-rule element='header'>
             <format attr='border-width' data-class='total' value='0' />
             <format attr='border-style' data-class='total' value='none' />
             <format attr='border-width' data-class='subtotal' value='0' />
             <format attr='border-style' data-class='subtotal' value='none' />
+            <format attr='height' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' value='25' />
           </style-rule>
           <style-rule element='label'>
             <format attr='text-align' value='center' />
@@ -5555,7 +5528,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -5568,10 +5540,10 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Order_Date]' derivation='Month-Trunc' name='[tmn:Order_Date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Calculation_1534159812132864]' derivation='User' name='[usr:Calculation_1534159812132864:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812284417]' derivation='User' name='[usr:Calculation_1534159812284417:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812485122]' derivation='User' name='[usr:Calculation_1534159812485122:qk]' pivot='key' type='quantitative' />
@@ -5582,12 +5554,10 @@
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812988933:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812755460:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812485122:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812284417:qk]&quot;' />
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812132864:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812640771:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812284417:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812485122:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812755460:qk]&quot;' />
             </groupfilter>
           </filter>
           <manual-sort column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' direction='ASC'>
@@ -5605,6 +5575,9 @@
           </filter>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Category)]'>
             <groupfilter function='level-members' level='[Category]' user:ui-action-filter='[Action5_353B6B299FBB4A3EA3FE7DFEE8FD0F57]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]'>
+            <groupfilter function='level-members' level='[tmn:Order_Date:ok]' user:ui-action-filter='[Action25_0770326060BF478F8A11F879970A91D3]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Region)]'>
             <groupfilter function='level-members' level='[Region]' user:ui-action-filter='[Action1_6F3A2533C2444C428BA564DCFEC5AB26]' user:ui-enumeration='all' user:ui-marker='enumerate' />
@@ -5625,8 +5598,8 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -5645,6 +5618,7 @@
           </style-rule>
           <style-rule element='header'>
             <format attr='color' data-class='subtotal' value='#000000' />
+            <format attr='height' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' value='21' />
           </style-rule>
           <style-rule element='label'>
             <format attr='color' value='#000000' />
@@ -5707,11 +5681,8 @@
           </datasources>
           <datasource-dependencies datasource='federated.0j495kw0i1sa6810dumqo0buc8yy'>
             <column datatype='string' name='[Brand]' role='dimension' type='nominal' />
-            <column caption='Total Revenue' datatype='real' name='[Calculation_1534159812132864]' role='measure' type='quantitative'>
-              <calculation class='tableau' formula='SUM([Net_Revenue_USD])' />
-            </column>
-            <column caption='Total Orders' datatype='integer' name='[Calculation_1534159812485122]' role='measure' type='quantitative'>
-              <calculation class='tableau' formula='COUNTD([Order_ID])' />
+            <column caption='Average Discount %' datatype='real' name='[Calculation_0179013483458562]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='AVG([Discount_Pct])' />
             </column>
             <column caption='Total Units Sold' datatype='integer' name='[Calculation_1534159812640771]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='SUM([Units_Sold])' />
@@ -5722,15 +5693,14 @@
             <column datatype='string' name='[Category]' role='dimension' type='nominal' />
             <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
             <column caption='Customer Segment' datatype='string' name='[Customer_Segment]' role='dimension' type='nominal' />
+            <column caption='Discount Pct' datatype='real' name='[Discount_Pct]' role='measure' type='quantitative' />
             <column datatype='string' name='[Gender]' role='dimension' type='nominal' />
             <column caption='Net Revenue USD' datatype='real' name='[Net_Revenue_USD]' role='measure' type='quantitative' />
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
-            <column caption='Order ID' datatype='string' name='[Order_ID]' role='dimension' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Product Name' datatype='string' name='[Product_Name]' role='dimension' type='nominal' />
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -5743,24 +5713,28 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
-            <column-instance column='[Calculation_1534159812132864]' derivation='User' name='[usr:Calculation_1534159812132864:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[Calculation_1534159812485122]' derivation='User' name='[usr:Calculation_1534159812485122:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_0179013483458562]' derivation='User' name='[usr:Calculation_0179013483458562:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812640771]' derivation='User' name='[usr:Calculation_1534159812640771:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812755460]' derivation='User' name='[usr:Calculation_1534159812755460:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812755460:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812485122:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812132864:qk]&quot;' />
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812640771:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013483458562:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812755460:qk]&quot;' />
             </groupfilter>
           </filter>
+          <manual-sort column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812640771:qk]&quot;</bucket>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013483458562:qk]&quot;</bucket>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812755460:qk]&quot;</bucket>
+            </dictionary>
+          </manual-sort>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Brand)]'>
             <groupfilter function='level-members' level='[Brand]' user:ui-action-filter='[Action9_ED2AE7264766482D88357B7D6DA4B38F]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
@@ -5797,7 +5771,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -5812,8 +5785,8 @@
             <format attr='font-size' value='14' />
             <format attr='font-weight' value='bold' />
             <format attr='text-align' value='center' />
-            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812132864:qk]' value='c&quot;$ &quot;#,##0,,.00M;&quot;$ &quot;-#,##0,,.00M' />
-            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812485122:qk]' value='n#,##0,K;-#,##0,K' />
+            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013483458562:qk]' value='p0.00%' />
+            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812640771:qk]' value='n#,##0,.0K;-#,##0,.0K' />
           </style-rule>
           <style-rule element='header'>
             <format attr='border-width' data-class='subtotal' scope='cols' value='2' />
@@ -5904,7 +5877,6 @@
             <column caption='Product Name' datatype='string' name='[Product_Name]' role='dimension' type='nominal' />
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -5916,7 +5888,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -5953,7 +5924,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -6022,7 +5992,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6054,7 +6023,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
@@ -6106,7 +6074,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6118,7 +6085,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6138,7 +6104,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -6148,6 +6113,13 @@
             <format attr='height' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[tmn:Order_Date:qk]' value='47' />
             <encoding attr='space' class='0' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[tmn:Order_Date:qk]' field-type='quantitative' max='#2025-05-03 04:04:35.404#' min='#2023-05-13 01:26:02.821#' range-type='fixed' scope='cols' type='space' />
             <encoding attr='space' class='0' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Net_Revenue_USD:qk]' field-type='quantitative' max='890130.63473602163' min='-439808.78084697813' range-type='fixed' scope='rows' type='space' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='band-size' scope='rows' value='0' />
+            <format attr='band-size' scope='cols' value='0' />
+          </style-rule>
+          <style-rule element='tooltip'>
+            <format attr='background-color' value='#ffffff' />
           </style-rule>
         </style>
         <panes>
@@ -6202,7 +6174,6 @@
             </column>
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6216,7 +6187,6 @@
             <column-instance column='[Orders per Customer (bin)]' derivation='None' name='[none:Orders per Customer (bin):ok]' pivot='key' type='ordinal' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6247,7 +6217,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Sales Channel)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -6301,7 +6270,6 @@
             <column caption='Order ID' datatype='string' name='[Order_ID]' role='dimension' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6314,7 +6282,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6343,7 +6310,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Sales Channel)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -6405,7 +6371,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Profit USD' datatype='real' name='[Profit_USD]' role='measure' type='quantitative' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6417,11 +6382,11 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Profit_USD]' derivation='Sum' name='[sum:Profit_USD:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Order_Date]' derivation='Month-Trunc' name='[tmn:Order_Date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Brand)]'>
@@ -6429,6 +6394,9 @@
           </filter>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Category)]'>
             <groupfilter function='level-members' level='[Category]' user:ui-action-filter='[Action5_353B6B299FBB4A3EA3FE7DFEE8FD0F57]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]'>
+            <groupfilter function='level-members' level='[tmn:Order_Date:ok]' user:ui-action-filter='[Action25_0770326060BF478F8A11F879970A91D3]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <shelf-sorts>
             <shelf-sort-v2 dimension-to-sort='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Region:nk]' direction='DESC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Profit_USD:qk]' shelf='columns' />
@@ -6447,8 +6415,8 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -6503,7 +6471,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6536,7 +6503,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Return Date))]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
@@ -6598,12 +6564,10 @@
             <column caption='Order ID (footwear!returns)' datatype='string' name='[Order_ID (footwear!returns)]' role='dimension' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Date' datatype='date' name='[Return_Date]' role='dimension' type='ordinal' />
             <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
-            <column-instance column='[Return_Date]' derivation='Month' name='[mn:Return_Date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Brand]' derivation='None' name='[none:Brand:nk]' pivot='key' type='nominal' />
             <column-instance column='[Category]' derivation='None' name='[none:Category:nk]' pivot='key' type='nominal' />
             <column-instance column='[Country]' derivation='None' name='[none:Country:nk]' pivot='key' type='nominal' />
@@ -6619,11 +6583,12 @@
             <column-instance column='[Calculation_0331845958483968]' derivation='User' name='[usr:Calculation_0331845958483968:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
-          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Return Date))]'>
-            <groupfilter function='level-members' level='[mn:Return_Date:ok]' user:ui-action-filter='[Action25_143F488D37AA486D8EE068D8BFA15277]' user:ui-enumeration='all' user:ui-marker='enumerate' />
-          </filter>
-          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]'>
-            <groupfilter function='level-members' level='[Ship_Mode]' user:ui-action-filter='[Action18_72DF60C3CC9D4729A7AC7122ADD0BC2A]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]'>
+            <groupfilter count='5' end='top' function='end' units='records' user:ui-marker='end' user:ui-top-by-field='true'>
+              <groupfilter direction='DESC' expression='[Calculation_0331845958483968]' function='order' user:ui-marker='order'>
+                <groupfilter function='level-members' level='[none:Return_Reason:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+              </groupfilter>
+            </groupfilter>
           </filter>
           <shelf-sorts>
             <shelf-sort-v2 dimension-to-sort='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]' direction='DESC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0331845958483968:qk]' shelf='rows' />
@@ -6640,14 +6605,16 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Return Date))]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
           </slices>
           <aggregation value='true' />
         </view>
-        <style />
+        <style>
+          <style-rule element='cell'>
+            <format attr='height' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]' value='34' />
+          </style-rule>
+        </style>
         <panes>
           <pane selection-relaxation-option='selection-relaxation-allow'>
             <view>
@@ -6694,7 +6661,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6706,7 +6672,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6736,7 +6701,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Sales Channel)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -6793,7 +6757,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6805,7 +6768,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -6839,7 +6801,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Sales Channel)]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -6898,7 +6859,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6910,15 +6870,18 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Net_Revenue_USD]' derivation='Sum' name='[sum:Net_Revenue_USD:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Order_Date]' derivation='Month-Trunc' name='[tmn:Order_Date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Category)]'>
             <groupfilter function='level-members' level='[Category]' user:ui-action-filter='[Action5_353B6B299FBB4A3EA3FE7DFEE8FD0F57]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]'>
+            <groupfilter function='level-members' level='[tmn:Order_Date:ok]' user:ui-action-filter='[Action25_0770326060BF478F8A11F879970A91D3]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Region)]'>
             <groupfilter function='level-members' level='[Region]' user:ui-action-filter='[Action1_6F3A2533C2444C428BA564DCFEC5AB26]' user:ui-enumeration='all' user:ui-marker='enumerate' />
@@ -6940,8 +6903,8 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -6985,7 +6948,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -6997,16 +6959,19 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Calculation_1534159816900615]' derivation='Sum' name='[sum:Calculation_1534159816900615:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Net_Revenue_USD]' derivation='Sum' name='[sum:Net_Revenue_USD:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Order_Date]' derivation='Month-Trunc' name='[tmn:Order_Date:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Brand)]'>
             <groupfilter function='level-members' level='[Brand]' user:ui-action-filter='[Action2_5BD21387FFDC4BDFB826B7D162E1EFDC]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]'>
+            <groupfilter function='level-members' level='[tmn:Order_Date:ok]' user:ui-action-filter='[Action25_0770326060BF478F8A11F879970A91D3]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Region)]'>
             <groupfilter function='level-members' level='[Region]' user:ui-action-filter='[Action1_6F3A2533C2444C428BA564DCFEC5AB26]' user:ui-enumeration='all' user:ui-marker='enumerate' />
@@ -7025,8 +6990,8 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (MONTH(Order Date))]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -7165,7 +7130,6 @@
             <column caption='Order Date' datatype='date' name='[Order_Date]' role='dimension' type='ordinal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column caption='Shipping Cost USD' datatype='real' name='[Shipping_Cost_USD]' role='measure' type='quantitative' />
@@ -7178,13 +7142,15 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
             <column-instance column='[Shipping_Cost_USD]' derivation='Sum' name='[sum:Shipping_Cost_USD:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
+          <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]'>
+            <groupfilter function='level-members' level='[Ship_Mode]' user:ui-action-filter='[Action17_EECC9935D6AD4D51A7AC51EA42673D6D]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
           <shelf-sorts>
             <shelf-sort-v2 dimension-to-sort='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' direction='DESC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Shipping_Cost_USD:qk]' shelf='rows' />
           </shelf-sorts>
@@ -7200,8 +7166,8 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
+            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Ship Mode)]</column>
           </slices>
           <aggregation value='true' />
         </view>
@@ -7266,7 +7232,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Quarter]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -7281,7 +7246,6 @@
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Quarter]' derivation='None' name='[none:Quarter:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -7321,7 +7285,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Country)]</column>
           </slices>
@@ -7381,7 +7344,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Product Name' datatype='string' name='[Product_Name]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -7394,7 +7356,6 @@
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Product_Name]' derivation='None' name='[none:Product_Name:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -7443,7 +7404,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -7488,7 +7448,6 @@
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column caption='Product Name' datatype='string' name='[Product_Name]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
@@ -7501,7 +7460,6 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
@@ -7542,7 +7500,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Payment_Method:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -7574,8 +7531,14 @@
           </datasources>
           <datasource-dependencies datasource='federated.0j495kw0i1sa6810dumqo0buc8yy'>
             <column datatype='string' name='[Brand]' role='dimension' type='nominal' />
-            <column caption='Orders per Customer' datatype='integer' name='[Calculation_0179013512900612]' role='measure' type='quantitative'>
+            <column caption='Total Customers' datatype='integer' name='[Calculation_0179013482115072]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='COUNTD([Customer_ID])' />
+            </column>
+            <column caption='Customer Order Count' datatype='integer' name='[Calculation_1161360548630528]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='{ FIXED [Customer_ID] :&#13;&#10;    COUNTD([Order_ID])&#13;&#10;}' />
+            </column>
+            <column caption='Repeat Customer Rate' datatype='real' name='[Calculation_1161360548904962]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='COUNTD(&#13;&#10;    IF [Calculation_1161360548630528] &gt; 1&#13;&#10;    THEN [Customer_ID]&#13;&#10;    END&#13;&#10;)&#13;&#10;/&#13;&#10;COUNTD([Customer_ID])' />
             </column>
             <column caption='Average Order Value' datatype='real' name='[Calculation_1534159812988933]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='SUM([Net_Revenue_USD])&#13;&#10;/&#13;&#10;COUNTD([Order_ID])' />
@@ -7590,12 +7553,9 @@
             <column caption='Order ID' datatype='string' name='[Order_ID]' role='dimension' type='nominal' />
             <column caption='Payment Method' datatype='string' name='[Payment_Method]' role='dimension' type='nominal' />
             <column datatype='string' name='[Region]' role='dimension' type='nominal' />
-            <column caption='Return Reason' datatype='string' name='[Return_Reason]' role='dimension' type='nominal' />
             <column caption='Sales Channel' datatype='string' name='[Sales_Channel]' role='dimension' type='nominal' />
             <column caption='Ship Mode' datatype='string' name='[Ship_Mode]' role='dimension' type='nominal' />
             <column aggregation='Sum' caption='Shoe Size US' datatype='real' name='[Shoe_Size_US]' role='dimension' type='ordinal' />
-            <column caption='Customer' datatype='table' name='[__tableau_internal_object_id__].[Customer_9C1348FFE1AB464DBFB33B48F500E0C1]' role='measure' type='quantitative' />
-            <column-instance column='[__tableau_internal_object_id__].[Customer_9C1348FFE1AB464DBFB33B48F500E0C1]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:Customer_9C1348FFE1AB464DBFB33B48F500E0C1:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Brand]' derivation='None' name='[none:Brand:nk]' pivot='key' type='nominal' />
             <column-instance column='[Category]' derivation='None' name='[none:Category:nk]' pivot='key' type='nominal' />
             <column-instance column='[Country]' derivation='None' name='[none:Country:nk]' pivot='key' type='nominal' />
@@ -7604,29 +7564,26 @@
             <column-instance column='[Order_Date]' derivation='None' name='[none:Order_Date:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Payment_Method]' derivation='None' name='[none:Payment_Method:nk]' pivot='key' type='nominal' />
             <column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
-            <column-instance column='[Return_Reason]' derivation='None' name='[none:Return_Reason:nk]' pivot='key' type='nominal' />
             <column-instance column='[Sales_Channel]' derivation='None' name='[none:Sales_Channel:nk]' pivot='key' type='nominal' />
             <column-instance column='[Ship_Mode]' derivation='None' name='[none:Ship_Mode:nk]' pivot='key' type='nominal' />
             <column-instance column='[Shoe_Size_US]' derivation='None' name='[none:Shoe_Size_US:ok]' pivot='key' type='ordinal' />
-            <column-instance column='[Calculation_0179013512900612]' derivation='Sum' name='[sum:Calculation_0179013512900612:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[Net_Revenue_USD]' derivation='Sum' name='[sum:Net_Revenue_USD:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_0179013482115072]' derivation='User' name='[usr:Calculation_0179013482115072:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1161360548904962]' derivation='User' name='[usr:Calculation_1161360548904962:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Calculation_1534159812988933]' derivation='User' name='[usr:Calculation_1534159812988933:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Order_Date]' derivation='Year' name='[yr:Order_Date:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[__tableau_internal_object_id__].[cnt:Customer_9C1348FFE1AB464DBFB33B48F500E0C1:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Calculation_0179013512900612:qk]&quot;' />
-              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Net_Revenue_USD:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013482115072:qk]&quot;' />
               <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812988933:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1161360548904962:qk]&quot;' />
             </groupfilter>
           </filter>
           <manual-sort column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' direction='ASC'>
             <dictionary>
-              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[__tableau_internal_object_id__].[cnt:Customer_9C1348FFE1AB464DBFB33B48F500E0C1:qk]&quot;</bucket>
-              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Calculation_0179013512900612:qk]&quot;</bucket>
-              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Net_Revenue_USD:qk]&quot;</bucket>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013482115072:qk]&quot;</bucket>
               <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812988933:qk]&quot;</bucket>
+              <bucket>&quot;[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1161360548904962:qk]&quot;</bucket>
             </dictionary>
           </manual-sort>
           <filter class='categorical' column='[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Customer Segment)]'>
@@ -7654,7 +7611,6 @@
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[Action (Sales Channel)]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Country:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[yr:Order_Date:ok]</column>
-            <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]</column>
             <column>[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]</column>
           </slices>
           <aggregation value='true' />
@@ -7666,8 +7622,8 @@
             <format attr='color' value='#000000' />
             <format attr='text-align' value='center' />
             <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1534159812988933:qk]' value='c&quot;$&quot;#,##0.00;&quot;$&quot;-#,##0.00' />
-            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Net_Revenue_USD:qk]' value='c&quot; $&quot;#,##0,,.00M;&quot; $&quot;-#,##0,,.00M' />
-            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[sum:Calculation_0179013512900612:qk]' value='n#,##0,K;-#,##0,K' />
+            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_1161360548904962:qk]' value='p0.00%' />
+            <format attr='text-format' field='[federated.0j495kw0i1sa6810dumqo0buc8yy].[usr:Calculation_0179013482115072:qk]' value='n#,##0,.00K;-#,##0,.00K' />
           </style-rule>
           <style-rule element='label'>
             <format attr='font-size' value='12' />
@@ -7810,8 +7766,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='1900' minheight='1900' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='71' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98002' id='70' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
+            <zone h='100000' id='73' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98002' id='72' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
                 <zone forceUpdate='true' h='9114' id='3' type-v2='text' w='97495' x='1220' y='749'>
                   <formatted-text>
                     <run bold='true' fontalignment='1' fontcolor='#ffffff' fontname='Benton Sans Book' fontsize='28'>CUSTOMER &amp; CHANNEL ANALYSIS</run>
@@ -8048,8 +8004,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='1700' minheight='1700' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='60' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98002' id='59' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
+            <zone h='100000' id='62' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98002' id='61' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
                 <zone forceUpdate='true' h='7740' id='3' type-v2='text' w='97495' x='1220' y='749'>
                   <formatted-text>
                     <run bold='true' fontalignment='1' fontcolor='#ffffff' fontname='Benton Sans Book' fontsize='28'>Executive Overview</run>
@@ -8080,7 +8036,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone fixed-size='63' h='9114' id='12' is-fixed='true' name='KPI first page' w='98073' x='1092' y='10861'>
+                <zone fixed-size='63' h='9114' id='12' is-fixed='true' name='KPI first page' w='86834' x='12267' y='10861'>
                   <zone-style>
                     <format attr='border-color' value='#ffffff' />
                     <format attr='border-style' value='solid' />
@@ -8090,7 +8046,7 @@
                     <format attr='background-color' value='#ffffff' />
                   </zone-style>
                 </zone>
-                <zone h='8739' id='44' name='Monthly Revenue Trend' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]' type-v2='filter' values='database' w='10276' x='1927' y='21973'>
+                <zone h='10487' id='44' name='Monthly Revenue Trend' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]' type-v2='filter' values='database' w='10790' x='963' y='11111'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8109,7 +8065,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='9863' id='47' mode='checkdropdown' name='Sales by Category' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='1798' y='55930'>
+                <zone h='12110' id='47' mode='checkdropdown' name='Sales by Category' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10790' x='963' y='53308'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8137,7 +8093,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='10112' id='46' mode='dropdown' name='Profit by Region' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Region:nk]' type-v2='filter' values='database' w='10276' x='1863' y='44320'>
+                <zone h='12484' id='46' mode='dropdown' name='Profit by Region' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Region:nk]' type-v2='filter' values='database' w='10790' x='963' y='38077'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8156,7 +8112,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='9738' id='45' mode='dropdown' name='Sales by Brand' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Brand:nk]' type-v2='filter' values='database' w='10276' x='1927' y='32584'>
+                <zone h='10986' id='45' mode='dropdown' name='Sales by Brand' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Brand:nk]' type-v2='filter' values='database' w='10790' x='963' y='24220'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8291,8 +8247,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='2000' minheight='2000' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='64' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98002' id='63' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
+            <zone h='100000' id='66' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98002' id='65' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
                 <zone forceUpdate='true' h='9114' id='3' type-v2='text' w='97495' x='1220' y='749'>
                   <formatted-text>
                     <run bold='true' fontalignment='1' fontcolor='#ffffff' fontname='Benton Sans Book' fontsize='28'>PRODUCT &amp; BRAND ANALYSIS</run>
@@ -8323,7 +8279,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone fixed-size='77' h='9613' id='21' is-fixed='true' name='KPI second page' w='97174' x='1220' y='10737'>
+                <zone fixed-size='77' h='9613' id='21' is-fixed='true' name='KPI second page' w='87091' x='11304' y='10737'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8333,7 +8289,7 @@
                     <format attr='background-color' value='#ffffff' />
                   </zone-style>
                 </zone>
-                <zone h='11486' id='48' mode='checkdropdown' name='Brand × Category Heat Map' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Brand:nk]' type-v2='filter' values='database' w='10340' x='321' y='21223'>
+                <zone h='11486' id='48' mode='checkdropdown' name='Brand × Category Heat Map' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Brand:nk]' type-v2='filter' values='database' w='10276' x='385' y='10861'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8343,7 +8299,7 @@
                     <format attr='background-color' value='#ffffff' />
                   </zone-style>
                 </zone>
-                <zone h='10861' id='49' mode='dropdown' name='Brand × Category Heat Map' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='385' y='33084'>
+                <zone h='12110' id='49' mode='dropdown' name='Brand × Category Heat Map' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='385' y='22971'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8362,7 +8318,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='10487' id='50' mode='dropdown' name='Brand Scatter Plot' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Gender:nk]' type-v2='filter' values='database' w='10276' x='385' y='44320'>
+                <zone h='12110' id='50' mode='dropdown' name='Brand Scatter Plot' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Gender:nk]' type-v2='filter' values='database' w='10276' x='385' y='35955'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8391,7 +8347,7 @@
                     <format attr='background-color' value='#ffffff' />
                   </zone-style>
                 </zone>
-                <zone fixed-size='280' h='36205' id='24' is-fixed='true' name='Top 10 Products' w='28773' x='70392' y='63046'>
+                <zone fixed-size='280' h='36205' id='24' is-fixed='true' name='Top 10 Products' w='28773' x='70713' y='63046'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8400,7 +8356,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='12235' id='51' mode='checkdropdown' name='Units Sold by Shoe Size' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Shoe_Size_US:ok]' type-v2='filter' values='database' w='10276' x='385' y='55056'>
+                <zone h='13358' id='51' mode='checkdropdown' name='Units Sold by Shoe Size' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Shoe_Size_US:ok]' type-v2='filter' values='database' w='10276' x='385' y='48814'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8410,7 +8366,7 @@
                     <format attr='background-color' value='#ffffff' />
                   </zone-style>
                 </zone>
-                <zone fixed-size='280' h='35955' id='25' is-fixed='true' name='Units Sold by Shoe Size' w='37123' x='2376' y='63171'>
+                <zone fixed-size='280' h='35955' id='25' is-fixed='true' name='Units Sold by Shoe Size' w='37765' x='514' y='63171'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8419,7 +8375,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone fixed-size='280' h='36080' id='23' is-fixed='true' name='Margin by Category' w='30764' x='39563' y='63296'>
+                <zone fixed-size='280' h='36080' id='23' is-fixed='true' name='Margin by Category' w='31407' x='38921' y='63296'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8527,8 +8483,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='1650' minheight='1650' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='66' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98002' id='65' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
+            <zone h='100000' id='68' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98002' id='67' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
                 <zone forceUpdate='true' h='7615' id='3' type-v2='text' w='97495' x='1220' y='749'>
                   <formatted-text>
                     <run bold='true' fontalignment='1' fontcolor='#ffffff' fontname='Benton Sans Book' fontsize='28'>Regional and Target Analysis</run>
@@ -8701,8 +8657,8 @@
         <zone h='39326' id='49' name='Average Shipping Days by Mode' w='33333' x='33783' y='59800' />
         <zone h='38951' id='50' name='Shipping Cost by Shipping Mode' w='31599' x='67373' y='59925' />
         <zone h='37953' id='51' name='Monthly Return Trend' w='53629' x='45472' y='21473' />
-        <zone h='10112' id='59' name='KPI 5 page' w='97238' x='1413' y='10861' />
-        <zone h='8115' id='68' name='Monthly Return Trend' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]' type-v2='filter' values='database' w='10276' x='1349' y='21099'>
+        <zone h='10112' id='59' name='KPI 5 page' w='86641' x='12010' y='10861' />
+        <zone h='10112' id='68' name='Monthly Return Trend' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]' type-v2='filter' values='database' w='10276' x='1092' y='13733'>
           <zone-style>
             <format attr='border-color' value='#444444' />
             <format attr='border-style' value='none' />
@@ -8710,7 +8666,7 @@
             <format attr='background-color' value='#ffffff' />
           </zone-style>
         </zone>
-        <zone h='9863' id='69' mode='dropdown' name='Return Orders by Reason' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]' type-v2='filter' values='database' w='10276' x='1349' y='29463'>
+        <zone h='10487' id='69' mode='dropdown' name='Return Orders by Reason' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]' type-v2='filter' values='database' w='10276' x='1028' y='24969'>
           <zone-style>
             <format attr='border-color' value='#444444' />
             <format attr='border-style' value='none' />
@@ -8718,7 +8674,7 @@
             <format attr='background-color' value='#ffffff' />
           </zone-style>
         </zone>
-        <zone h='10362' id='70' mode='dropdown' name='Shipping Cost by Shipping Mode' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' type-v2='filter' values='database' w='10276' x='1349' y='39576'>
+        <zone h='10362' id='70' mode='dropdown' name='Shipping Cost by Shipping Mode' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' type-v2='filter' values='database' w='10276' x='1028' y='36829'>
           <zone-style>
             <format attr='border-color' value='#444444' />
             <format attr='border-style' value='none' />
@@ -8726,7 +8682,7 @@
             <format attr='background-color' value='#ffffff' />
           </zone-style>
         </zone>
-        <zone h='9488' id='71' mode='dropdown' name='Refund Amount by Category' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='1349' y='50187'>
+        <zone h='10612' id='71' mode='dropdown' name='Refund Amount by Category' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='1028' y='49064'>
           <zone-style>
             <format attr='border-color' value='#444444' />
             <format attr='border-style' value='none' />
@@ -8748,8 +8704,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='1950' minheight='1950' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='82' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98002' id='81' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
+            <zone h='100000' id='84' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98002' id='83' param='vert' type-v2='layout-flow' w='98972' x='514' y='999'>
                 <zone forceUpdate='true' h='9238' id='3' type-v2='text' w='97238' x='1477' y='749'>
                   <formatted-text>
                     <run bold='true' fontalignment='1' fontcolor='#ffffff' fontname='Benton Sans Book' fontsize='28'>Returns and Shipping Analysis</run>
@@ -8780,7 +8736,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone fixed-size='81' h='10112' id='59' is-fixed='true' name='KPI 5 page' w='97238' x='1413' y='10861'>
+                <zone fixed-size='81' h='10112' id='59' is-fixed='true' name='KPI 5 page' w='86641' x='12010' y='10861'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8789,7 +8745,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='9863' id='69' mode='dropdown' name='Return Orders by Reason' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]' type-v2='filter' values='database' w='10276' x='1349' y='29463'>
+                <zone h='10487' id='69' mode='dropdown' name='Return Orders by Reason' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Return_Reason:nk]' type-v2='filter' values='database' w='10276' x='1028' y='24969'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8808,7 +8764,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='8115' id='68' name='Monthly Return Trend' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]' type-v2='filter' values='database' w='10276' x='1349' y='21099'>
+                <zone h='10112' id='68' name='Monthly Return Trend' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Order_Date:qk]' type-v2='filter' values='database' w='10276' x='1092' y='13733'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8836,7 +8792,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='9488' id='71' mode='dropdown' name='Refund Amount by Category' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='1349' y='50187'>
+                <zone h='10612' id='71' mode='dropdown' name='Refund Amount by Category' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Category:nk]' type-v2='filter' values='database' w='10276' x='1028' y='49064'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8855,7 +8811,7 @@
                     <format attr='padding' value='0' />
                   </zone-style>
                 </zone>
-                <zone h='10362' id='70' mode='dropdown' name='Shipping Cost by Shipping Mode' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' type-v2='filter' values='database' w='10276' x='1349' y='39576'>
+                <zone h='10362' id='70' mode='dropdown' name='Shipping Cost by Shipping Mode' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[none:Ship_Mode:nk]' type-v2='filter' values='database' w='10276' x='1028' y='36829'>
                   <zone-style>
                     <format attr='border-color' value='#444444' />
                     <format attr='border-style' value='none' />
@@ -8883,7 +8839,7 @@
     </dashboard>
   </dashboards>
   <windows source-height='37'>
-    <window class='dashboard' maximized='true' name='Executive Overview'>
+    <window class='dashboard' name='Executive Overview'>
       <viewpoints>
         <viewpoint name='KPI first page'>
           <zoom type='entire-view' />
@@ -8923,7 +8879,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='23' />
+      <active id='-1' />
       <simple-id uuid='{5BEAA060-824A-4F26-84F6-4AB8D76005D1}' />
     </window>
     <window class='dashboard' name='PRODUCT &amp; BRAND ANALYSIS'>
@@ -8945,7 +8901,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='-1' />
+      <active id='60' />
       <simple-id uuid='{3F4AA62F-7C41-41A8-A285-E366AA8A9309}' />
     </window>
     <window class='dashboard' name='CUSTOMER &amp; CHANNEL ANALYSIS'>
@@ -8963,10 +8919,10 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='67' />
+      <active id='-1' />
       <simple-id uuid='{B12994A0-7227-4712-B63C-7DB722329478}' />
     </window>
-    <window class='dashboard' name='Returns and Shipping Analysis'>
+    <window class='dashboard' maximized='true' name='Returns and Shipping Analysis'>
       <viewpoints>
         <viewpoint name='Average Shipping Days by Mode' />
         <viewpoint name='KPI 5 page'>
@@ -9509,13 +9465,10 @@
         </edge>
         <edge name='right'>
           <strip size='160'>
-            <card pane-specification-id='5' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' type='color' />
+            <card pane-specification-id='0' param='[federated.0j495kw0i1sa6810dumqo0buc8yy].[:Measure Names]' type='color' />
           </strip>
         </edge>
       </cards>
-      <viewpoint>
-        <zoom type='entire-view' />
-      </viewpoint>
       <simple-id uuid='{F260215A-CE55-47B2-B42B-63F1BA41F56B}' />
     </window>
     <window class='worksheet' name='Orders by Payment Method'>
